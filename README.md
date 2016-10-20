@@ -20,6 +20,12 @@ The [Redux Readme](https://github.com/reactjs/redux) is a good place to start.
 
 ##### Testing
 
+Install dependencies:
+
+```
+pip install -r requirements.txt
+```
+
 To run the unit tests:
 
 ```

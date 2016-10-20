@@ -220,3 +220,17 @@ class TestCreateStore(unittest.TestCase):
         store.dispatch(unknown_action())
         self.assertEqual(listenerA.call_count, 4)
         self.assertEqual(listenerB.call_count, 2)
+
+    def test_only_removes_relevant_listener(self):
+        '''only removes relevant listener when unsubscribe is called'''
+        store = pydux.create_store(reducer_todos)
+        listener = MagicMock()
+
+        store.subscribe(listener)
+        unsubscribe_second = store.subscribe(listener)
+
+        unsubscribe_second()
+        unsubscribe_second()
+
+        store.dispatch(unknown_action())
+        self.assertEqual(listener.call_count, 1)
