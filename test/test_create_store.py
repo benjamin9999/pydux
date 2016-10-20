@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 import unittest
+from mock import MagicMock
 import pydux
 from .helpers import *
 
@@ -172,3 +173,50 @@ class TestCreateStore(unittest.TestCase):
                 'text': 'Surely'
             }
         ])
+
+    def test_supports_multiple_subscriptions(self):
+        '''supports multiple subscriptions'''
+        store = pydux.create_store(reducer_todos)
+        listenerA = MagicMock()
+        listenerB = MagicMock()
+
+        unsubscribeA = store.subscribe(listenerA)
+        store.dispatch(unknown_action())
+        self.assertEqual(listenerA.call_count, 1)
+        self.assertEqual(listenerB.call_count, 0)
+
+        store.dispatch(unknown_action())
+        self.assertEqual(listenerA.call_count, 2)
+        self.assertEqual(listenerB.call_count, 0)
+
+        unsubscribeB = store.subscribe(listenerB)
+        self.assertEqual(listenerA.call_count, 2)
+        self.assertEqual(listenerB.call_count, 0)
+
+        store.dispatch(unknown_action())
+        self.assertEqual(listenerA.call_count, 3)
+        self.assertEqual(listenerB.call_count, 1)
+
+        unsubscribeA()
+        self.assertEqual(listenerA.call_count, 3)
+        self.assertEqual(listenerB.call_count, 1)
+
+        store.dispatch(unknown_action())
+        self.assertEqual(listenerA.call_count, 3)
+        self.assertEqual(listenerB.call_count, 2)
+
+        unsubscribeB()
+        self.assertEqual(listenerA.call_count, 3)
+        self.assertEqual(listenerB.call_count, 2)
+
+        store.dispatch(unknown_action())
+        self.assertEqual(listenerA.call_count, 3)
+        self.assertEqual(listenerB.call_count, 2)
+
+        unsubscribeA = store.subscribe(listenerA)
+        self.assertEqual(listenerA.call_count, 3)
+        self.assertEqual(listenerB.call_count, 2)
+
+        store.dispatch(unknown_action())
+        self.assertEqual(listenerA.call_count, 4)
+        self.assertEqual(listenerB.call_count, 2)

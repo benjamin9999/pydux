@@ -48,18 +48,18 @@ class Store(object):
         if not hasattr(listener, '__call__'):
             raise TypeError('Expected listener to be a function.')
 
-        self.is_subscribed = [True]  # r/w closure
+        is_subscribed = [True]  # r/w closure
 
         self.ensure_can_mutate_next_listeners()
         self.next_listeners[0].append(listener)
 
         def unsubcribe():
-            if not self.is_subscribed[0]:
+            if not is_subscribed[0]:
                 return
-            self.is_subscribed[0] = False
+            is_subscribed[0] = False
 
             self.ensure_can_mutate_next_listeners()
-            index = next_listeners[0].index(listener)
+            index = self.next_listeners[0].index(listener)
             self.next_listeners[0].pop(index)
 
         return unsubcribe
@@ -82,8 +82,8 @@ class Store(object):
         finally:
             self.is_dispatching[0] = False
 
-        self.listeners = self.current_listeners[0] = self.next_listeners[0]
-        for listener in self.listeners:
+        listeners = self.current_listeners[0] = self.next_listeners[0]
+        for listener in listeners:
             listener()
 
         return action
