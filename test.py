@@ -18,6 +18,15 @@ def reducer_todos(state, action):
         return copy
     return state
 
+def reducer_todos_reverse(state, action):
+    if state is None:
+        state = []
+    if action['type'] == 'ADD_TODO':
+        copy = state[:]
+        copy.insert(0, ({'id': id(state), 'text': action['text']}))
+        return copy
+    return state
+
 def unknown_action():
     return {'type': 'UNKNOWN_ACTION'}
 
@@ -112,6 +121,90 @@ class TestCreateStore(unittest.TestCase):
                 'text': 'World'
             }
         ])
+
+    def test_preserves_state_replacing(self):
+        '''preserves the state when replacing a reducer'''
+        store = pydux.create_store(reducer_todos)
+        store.dispatch(add_todo('Hello'))
+        store.dispatch(add_todo('World'))
+        self.assertEqual(store.get_state(), [
+            {
+                'id': 1,
+                'text': 'Hello'
+            },
+            {
+                'id': 2,
+                'text': 'World'
+            }
+        ])
+
+        store.replace_reducer(reducer_todos_reverse)
+        self.assertEqual(store.get_state(), [
+            {
+                'id': 1,
+                'text': 'Hello'
+            },
+            {
+                'id': 2,
+                'text': 'World'
+            }
+        ])
+
+        store.dispatch(add_todo('Perhaps'))
+        self.assertEqual(store.get_state(), [
+            {
+                'id': 3,
+                'text': 'Perhaps'
+            },
+            {
+                'id': 1,
+                'text': 'Hello'
+            },
+            {
+                'id': 2,
+                'text': 'World'
+            }
+        ])
+
+        store.replace_reducer(reducer_todos)
+        self.assertEqual(store.get_state(), [
+            {
+                'id': 3,
+                'text': 'Perhaps'
+            },
+            {
+                'id': 1,
+                'text': 'Hello'
+            },
+            {
+                'id': 2,
+                'text': 'World'
+            }
+        ])
+
+        store.dispatch(add_todo('Surely'))
+        self.assertEqual(store.get_state(), [
+            {
+                'id': 3,
+                'text': 'Perhaps'
+            },
+            {
+                'id': 1,
+                'text': 'Hello'
+            },
+            {
+                'id': 2,
+                'text': 'World'
+            },
+            {
+                'id': 4,
+                'text': 'Surely'
+            }
+        ])
+
+
+
+
 
 
 

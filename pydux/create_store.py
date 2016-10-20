@@ -88,7 +88,7 @@ class Store(object):
 
         return action
 
-    def replace_reducer(next_reducer):
+    def replace_reducer(self, next_reducer):
         if not hasattr(next_reducer, '__call__'):
             raise TypeError('Expected the next_reducer to be a function')
 
