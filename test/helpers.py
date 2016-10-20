@@ -1,3 +1,5 @@
+from functools import reduce
+
 def id(state=[]):
     def f(result, item):
         if item['id'] > result:

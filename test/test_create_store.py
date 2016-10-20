@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 import unittest
 import pydux
-from helpers import *
+from .helpers import *
 
 
 class TestCreateStore(unittest.TestCase):
