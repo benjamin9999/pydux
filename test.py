@@ -44,7 +44,7 @@ class TestCreateStore(unittest.TestCase):
     def test_passes_initial(self):
         '''passes the initial action and the initial state'''
         store = pydux.create_store(reducer_todos, [
-            { 'id': 1, 'text': 'Hello' }
+            {'id': 1, 'text': 'Hello'}
         ])
         self.assertEqual(store.get_state(), [
             {'id': 1, 'text': 'Hello'}
@@ -78,6 +78,40 @@ class TestCreateStore(unittest.TestCase):
             }
         ])
 
+    def test_applies_reducer_initial(self):
+        '''applies the reducer to the initial state'''
+        store = pydux.create_store(reducer_todos, [
+            {
+                'id': 1,
+                'text': 'Hello'
+            }
+        ])
+        self.assertEqual(store.get_state(), [
+            {
+                'id': 1,
+                'text': 'Hello'
+            }
+        ])
+
+        store.dispatch(unknown_action())
+        self.assertEqual(store.get_state(), [
+            {
+                'id': 1,
+                'text': 'Hello'
+            }
+        ])
+
+        store.dispatch(add_todo('World'))
+        self.assertEqual(store.get_state(), [
+            {
+                'id': 1,
+                'text': 'Hello'
+            },
+            {
+                'id': 2,
+                'text': 'World'
+            }
+        ])
 
 
 
