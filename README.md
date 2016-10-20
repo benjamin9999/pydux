@@ -18,6 +18,20 @@ The [Redux Readme](https://github.com/reactjs/redux) is a good place to start.
 
 [urwid_todos](https://github.com/benjamin9999/urwid_todos) is a reimplementation of the Redux [todos](http://redux.js.org/docs/basics/ExampleTodoList.html) example made with [urwid_pydux](https://github.com/benjamin9999/urwid_pydux).
 
+##### Testing
+
+Install dependencies:
+
+```
+pip install -r requirements.txt
+```
+
+To run the unit tests:
+
+```
+python -m unittest discover
+```
+
 ##### Todo
 
-+ Reimplement the tests :)
++ Reimplement more of the tests :)
