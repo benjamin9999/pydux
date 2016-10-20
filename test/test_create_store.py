@@ -234,3 +234,28 @@ class TestCreateStore(unittest.TestCase):
 
         store.dispatch(unknown_action())
         self.assertEqual(listener.call_count, 1)
+
+    def test_removing_subscription_within_subscription(self):
+        '''supports removing a subscription within a subscription'''
+        store = pydux.create_store(reducer_todos)
+        listenerA = MagicMock()
+        listenerB = MagicMock()
+        listenerC = MagicMock()
+
+        store.subscribe(listenerA)
+
+        def listener():
+            listenerB()
+            unsubB()
+
+        unsubB = store.subscribe(listener)
+
+        store.subscribe(listenerC)
+
+        store.dispatch(unknown_action())
+        store.dispatch(unknown_action())
+
+        self.assertEqual(listenerA.call_count, 2)
+        self.assertEqual(listenerB.call_count, 1)
+        self.assertEqual(listenerC.call_count, 2)
+
