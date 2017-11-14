@@ -73,7 +73,7 @@ store.dispatch({ 'type': 'DECREMENT' })
 
 [urwid_todos](https://github.com/usrlocalben/urwid_todos) is a reimplementation of the Redux [todos](http://redux.js.org/docs/basics/ExampleTodoList.html) example made with [urwid_pydux](https://github.com/usrlocalben/urwid_pydux).
 
-[canute-ui](https://github.com/Bristol-Braille/canute-ui) is the user interface for a multi-line electronic Braille e-book reader.
+[canute-ui](https://github.com/Bristol-Braille/canute-ui/blob/b7b90093937bd170ebb9af37ebf5ad362ad85a2e/ui/store.py) is the user interface for a multi-line electronic Braille e-book reader.
 
 
 ##### Acknowledgements
